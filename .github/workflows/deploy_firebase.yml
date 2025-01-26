@@ -56,13 +56,23 @@ jobs:
           projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
           channelId: live
 
-      # Step 7: Deploy to Firebase Hosting
+      # Step 7: Set up Firebase CLI
+      - name: Set up Firebase CLI
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TRACKERU_DB }}
+          projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
+          channelId: live
+
+      # Step 8: Deploy to Firebase Hosting
       - name: Deploy to Firebase Hosting
         run: firebase deploy --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
-      # Optional: Validate Environment Variables (be cautious with secrets in logs)
+      # Optional: Validate Environment Variables
       - name: Validate Environment Variables
         run: |
-          echo "Firebase Project ID set in the workflow (Do NOT print secrets in logs): ${FIREBASE_PROJECT_ID}"
+          echo "FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}"
+          echo "FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}"
