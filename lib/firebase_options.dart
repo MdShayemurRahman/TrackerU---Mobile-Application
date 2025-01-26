@@ -21,39 +21,49 @@ class DefaultFirebaseOptions {
   }
 
   static FirebaseOptions get web => FirebaseOptions(
-        apiKey: dotenv.env['FIREBASE_WEB_API_KEY']!,
-        appId: dotenv.env['FIREBASE_WEB_APP_ID']!,
-        messagingSenderId: dotenv.env['FIREBASE_WEB_MESSAGING_SENDER_ID']!,
-        projectId: dotenv.env['FIREBASE_PROJECT_ID']!,
-        authDomain: dotenv.env['FIREBASE_AUTH_DOMAIN']!,
-        storageBucket: dotenv.env['FIREBASE_STORAGE_BUCKET']!,
+        apiKey: _getEnv('FIREBASE_WEB_API_KEY'),
+        appId: _getEnv('FIREBASE_WEB_APP_ID'),
+        messagingSenderId: _getEnv('FIREBASE_WEB_MESSAGING_SENDER_ID'),
+        projectId: _getEnv('FIREBASE_PROJECT_ID'),
+        authDomain: _getEnv('FIREBASE_AUTH_DOMAIN'),
+        storageBucket: _getEnv('FIREBASE_STORAGE_BUCKET'),
       );
 
   static FirebaseOptions get android => FirebaseOptions(
-        apiKey: dotenv.env['FIREBASE_ANDROID_API_KEY']!,
-        appId: dotenv.env['FIREBASE_ANDROID_APP_ID']!,
-        messagingSenderId: dotenv.env['FIREBASE_ANDROID_MESSAGING_SENDER_ID']!,
-        projectId: dotenv.env['FIREBASE_PROJECT_ID']!,
-        storageBucket: dotenv.env['FIREBASE_STORAGE_BUCKET']!,
+        apiKey: _getEnv('FIREBASE_ANDROID_API_KEY'),
+        appId: _getEnv('FIREBASE_ANDROID_APP_ID'),
+        messagingSenderId: _getEnv('FIREBASE_ANDROID_MESSAGING_SENDER_ID'),
+        projectId: _getEnv('FIREBASE_PROJECT_ID'),
+        storageBucket: _getEnv('FIREBASE_STORAGE_BUCKET'),
       );
 
   static FirebaseOptions get ios => FirebaseOptions(
-        apiKey: dotenv.env['FIREBASE_IOS_API_KEY']!,
-        appId: dotenv.env['FIREBASE_IOS_APP_ID']!,
-        messagingSenderId: dotenv.env['FIREBASE_IOS_MESSAGING_SENDER_ID']!,
-        projectId: dotenv.env['FIREBASE_PROJECT_ID']!,
-        storageBucket: dotenv.env['FIREBASE_STORAGE_BUCKET']!,
-        iosClientId: dotenv.env['FIREBASE_IOS_CLIENT_ID']!,
+        apiKey: _getEnv('FIREBASE_IOS_API_KEY'),
+        appId: _getEnv('FIREBASE_IOS_APP_ID'),
+        messagingSenderId: _getEnv('FIREBASE_IOS_MESSAGING_SENDER_ID'),
+        projectId: _getEnv('FIREBASE_PROJECT_ID'),
+        storageBucket: _getEnv('FIREBASE_STORAGE_BUCKET'),
+        iosClientId: _getEnv('FIREBASE_IOS_CLIENT_ID'),
         iosBundleId: 'com.example.trackeru',
       );
 
   static FirebaseOptions get macos => FirebaseOptions(
-        apiKey: dotenv.env['FIREBASE_IOS_API_KEY']!,
-        appId: dotenv.env['FIREBASE_IOS_APP_ID']!,
-        messagingSenderId: dotenv.env['FIREBASE_IOS_MESSAGING_SENDER_ID']!,
-        projectId: dotenv.env['FIREBASE_PROJECT_ID']!,
-        storageBucket: dotenv.env['FIREBASE_STORAGE_BUCKET']!,
-        iosClientId: dotenv.env['FIREBASE_IOS_CLIENT_ID']!,
+        apiKey: _getEnv('FIREBASE_IOS_API_KEY'),
+        appId: _getEnv('FIREBASE_IOS_APP_ID'),
+        messagingSenderId: _getEnv('FIREBASE_IOS_MESSAGING_SENDER_ID'),
+        projectId: _getEnv('FIREBASE_PROJECT_ID'),
+        storageBucket: _getEnv('FIREBASE_STORAGE_BUCKET'),
+        iosClientId: _getEnv('FIREBASE_IOS_CLIENT_ID'),
         iosBundleId: 'com.example.trackeru.RunnerTests',
       );
+
+  static String _getEnv(String key) {
+    // First check if the key exists in dotenv.env (runtime)
+    if (dotenv.isInitialized && dotenv.env.containsKey(key)) {
+      return dotenv.env[key]!;
+    }
+
+    // Fallback to compile-time environment variable
+    return String.fromEnvironment(key, defaultValue: '');
+  }
 }
