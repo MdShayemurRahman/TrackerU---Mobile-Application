@@ -3,10 +3,10 @@ name: Deploy to Firebase Hosting
 on:
   push:
     branches:
-      - main  # Trigger workflow on pushes to the main branch
+      - main # Trigger workflow on pushes to the main branch
   pull_request:
     branches:
-      - main  # Optional: Run checks on pull requests to main
+      - main # Optional: Run checks on pull requests to main
 
 jobs:
   build_and_deploy:
@@ -16,11 +16,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2: Set up Flutter
+      # Step 2: Set up Flutter with the correct version (3.27.3)
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.7.0'  # Specify the Flutter version you want to use
+          flutter-version: '3.27.3' # Match your local Flutter version
 
       # Step 3: Install dependencies
       - name: Install Dependencies
