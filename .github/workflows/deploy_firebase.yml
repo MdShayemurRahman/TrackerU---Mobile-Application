@@ -9,36 +9,35 @@ on:
       - main  # Optional: Run checks on pull requests to main
 
 jobs:
-  build-and-deploy:
-    name: Build and Deploy to Firebase Hosting
+  build_and_deploy:
     runs-on: ubuntu-latest
-
     steps:
       # Step 1: Checkout the repository
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       # Step 2: Set up Flutter
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'  # Use the stable Flutter version
+          flutter-version: '3.7.0'  # Specify the Flutter version you want to use
 
       # Step 3: Install dependencies
       - name: Install Dependencies
         run: flutter pub get
 
-      # Step 4: Build the web app
+      # Step 4: Build the Flutter web app
       - name: Build Flutter Web
         run: flutter build web
 
       # Step 5: Set up Firebase CLI
       - name: Set up Firebase CLI
-        uses: w9jds/firebase-action@v2.0.0
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          args: version --json
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TRACKERU_DB }}
+          projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
+          channelId: live
 
       # Step 6: Deploy to Firebase Hosting
       - name: Deploy to Firebase Hosting
@@ -46,12 +45,9 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
-      # Step 7: Environment validation (optional)
+      # Optional: Validate Environment Variables
       - name: Validate Environment Variables
         run: |
-          echo "FIREBASE_WEB_API_KEY: ${{ secrets.FIREBASE_WEB_API_KEY }}"
-          echo "FIREBASE_WEB_APP_ID: ${{ secrets.FIREBASE_WEB_APP_ID }}"
-          echo "FIREBASE_WEB_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_WEB_MESSAGING_SENDER_ID }}"
           echo "FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}"
-          echo "FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}"
           echo "FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}"
+          # Avoid printing sensitive secrets in logs
