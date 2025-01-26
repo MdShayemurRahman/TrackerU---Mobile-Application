@@ -12,8 +12,10 @@ import 'package:trackeru/components/locationMainsreen.dart';
 import 'package:trackeru/views/setting_view.dart';
 
 void main() async {
-  await dotenv.load(fileName: ".env");
-  
+  if (const bool.fromEnvironment('dart.vm.product') == false) {
+    await dotenv.load(fileName: ".env");
+  }
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
