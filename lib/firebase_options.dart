@@ -64,6 +64,10 @@ class DefaultFirebaseOptions {
     }
 
     // Fallback to compile-time environment variable
-    return String.fromEnvironment(key, defaultValue: '');
+    String value = String.fromEnvironment(key, defaultValue: '');
+    if (value.isEmpty) {
+      print("Warning: Environment variable $key is not set.");
+    }
+    return value;
   }
 }
