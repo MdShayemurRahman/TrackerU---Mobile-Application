@@ -26,11 +26,28 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-      # Step 4: Build the Flutter web app
+      # Step 4: Set environment variables from GitHub Secrets
+      - name: Set environment variables from GitHub Secrets
+        run: |
+          echo "FIREBASE_WEB_API_KEY=${{ secrets.FIREBASE_WEB_API_KEY }}" >> $GITHUB_ENV
+          echo "FIREBASE_WEB_APP_ID=${{ secrets.FIREBASE_WEB_APP_ID }}" >> $GITHUB_ENV
+          echo "FIREBASE_WEB_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_WEB_MESSAGING_SENDER_ID }}" >> $GITHUB_ENV
+          echo "FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }}" >> $GITHUB_ENV
+          echo "FIREBASE_AUTH_DOMAIN=${{ secrets.FIREBASE_AUTH_DOMAIN }}" >> $GITHUB_ENV
+          echo "FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }}" >> $GITHUB_ENV
+          echo "FIREBASE_ANDROID_API_KEY=${{ secrets.FIREBASE_ANDROID_API_KEY }}" >> $GITHUB_ENV
+          echo "FIREBASE_ANDROID_APP_ID=${{ secrets.FIREBASE_ANDROID_APP_ID }}" >> $GITHUB_ENV
+          echo "FIREBASE_ANDROID_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_ANDROID_MESSAGING_SENDER_ID }}" >> $GITHUB_ENV
+          echo "FIREBASE_IOS_API_KEY=${{ secrets.FIREBASE_IOS_API_KEY }}" >> $GITHUB_ENV
+          echo "FIREBASE_IOS_APP_ID=${{ secrets.FIREBASE_IOS_APP_ID }}" >> $GITHUB_ENV
+          echo "FIREBASE_IOS_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_IOS_MESSAGING_SENDER_ID }}" >> $GITHUB_ENV
+          echo "GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}" >> $GITHUB_ENV
+
+      # Step 5: Build the Flutter web app
       - name: Build Flutter Web
         run: flutter build web
 
-      # Step 5: Set up Firebase CLI
+      # Step 6: Set up Firebase CLI
       - name: Set up Firebase CLI
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -39,15 +56,13 @@ jobs:
           projectId: ${{ secrets.FIREBASE_PROJECT_ID }}
           channelId: live
 
-      # Step 6: Deploy to Firebase Hosting
+      # Step 7: Deploy to Firebase Hosting
       - name: Deploy to Firebase Hosting
         run: firebase deploy --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
-      # Optional: Validate Environment Variables
+      # Optional: Validate Environment Variables (be cautious with secrets in logs)
       - name: Validate Environment Variables
         run: |
-          echo "FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}"
-          echo "FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}"
-          # Avoid printing sensitive secrets in logs
+          echo "Firebase Project ID set in the workflow (Do NOT print secrets in logs): ${FIREBASE_PROJECT_ID}"
