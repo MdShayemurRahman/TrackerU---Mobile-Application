@@ -42,6 +42,8 @@ jobs:
           echo "FIREBASE_IOS_APP_ID=${{ secrets.FIREBASE_IOS_APP_ID }}" >> $GITHUB_ENV
           echo "FIREBASE_IOS_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_IOS_MESSAGING_SENDER_ID }}" >> $GITHUB_ENV
           echo "GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}" >> $GITHUB_ENV
+          echo "FIREBASE_TOKEN=${{ secrets.FIREBASE_TOKEN }}" >> $GITHUB_ENV
+          echo "FIREBASE_SERVICE_ACCOUNT_TRACKERU_DB=${{ secrets.FIREBASE_SERVICE_ACCOUNT_TRACKERU_DB }}" >> $GITHUB_ENV
 
       # Step 5: Build the Flutter web app
       - name: Build Flutter Web
@@ -67,7 +69,7 @@ jobs:
 
       # Step 8: Deploy to Firebase Hosting
       - name: Deploy to Firebase Hosting
-        run: firebase deploy --only hosting
+        run: firebase deploy
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
